@@ -109,5 +109,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# TVDB API Key
+# TMDB API Key
 TMDB_KEY = config.get('tmdb', 'key')
