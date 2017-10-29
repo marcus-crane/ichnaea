@@ -99,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Pacific/Auckland'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -111,3 +111,11 @@ STATIC_URL = '/static/'
 
 # TMDB API Key
 TMDB_KEY = config.get('tmdb', 'key')
+
+# Celery
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Pacific/Auckland'
