@@ -1,0 +1,37 @@
+{% extends 'shows/base.html' %}
+
+{% block content %}
+  {% for season in seasons %}
+    <div class="ui styled fluid accordion">
+      <div class="title">
+        <i class="dropdown icon"></i>
+        {{ season.name }}
+      </div>
+      <div class="content">
+        <table class="ui single line table">
+          <thead>
+            <th>#</th>
+            <th>Name</th>
+            <th>Aired</th>
+            <th>Seen?</th>
+          </thead>
+          <tbody>
+            {% for episode in episodes %}
+              <tr>
+                  <td>{{ episode.episode_number }}
+                  <td>{{ episode.name }}</td>
+                  <td>{{ episode.airdate }}</td>
+                  <td>{{ episode.seen }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+  $('.ui.accordion')
+    .accordion()
+{% endblock %}

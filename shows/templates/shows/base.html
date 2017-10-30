@@ -20,5 +20,9 @@
     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
   <script src="{% static 'shows/js/semantic.min.js' %}"></script>
+  <script>
+    {% block scripts %}
+    {% endblock %}
+  </script>
 </body>
 </html>
