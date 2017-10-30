@@ -48,7 +48,7 @@ def fetch_season(tmdb_id, season_number):
         airdate = season_data['air_date']
         overview = season_data['overview']
 
-        season = Season.objects.create(show=show, name=name, season_poster=season_poster
+        season = Season.objects.create(show=show, name=name, season_poster=season_poster,
                 season_number=season_number, airdate=airdate, overview=overview)
 
         for episode in season_data['episodes']:
