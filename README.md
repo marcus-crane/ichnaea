@@ -1,5 +1,9 @@
 # Ichnaea
 
+## What's the name?
+
+I needed a name and a quick google shows that Ichnaea was the Greek Goddess of tracking *wink wink*. It seems that Mozilla have a project with the same name which I only just realised now but oh well, sue me, haha.
+
 As much as I like [trakt](https://trakt.tv), I felt that it's a bit overkill when all I want is a simple TV show tracker.
 
 Most of them also use [tvdb](https://www.thetvdb.com] which doesn't support sports, and by association, wrestling which is a pain in the butt.
