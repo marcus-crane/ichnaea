@@ -8,7 +8,7 @@
         <img src="https://image.tmdb.org/t/p/w320{{ show.bg_art }}">
       </div>
       <div class="content">
-        <a class="header">{{ show.name }}</a>
+        <a class="header" href="{{ show.slug }}">{{ show.name }}</a>
         <div class="meta">
           <span class="date">
             {% if show.seen %}
