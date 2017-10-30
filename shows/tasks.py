@@ -18,6 +18,7 @@ def fetch_show(tmdb_id):
 
         name = show['name']
         slug = slugify(name)
+        bg_art = show['backdrop_path']
         episodes = show['number_of_episodes']
         seasons = show['number_of_seasons']
         language = show['original_language']
@@ -43,20 +44,22 @@ def fetch_season(tmdb_id, season_number):
 
         name = season_data['name']
         season_number = season_data['season_number']
+        season_poster = season_data['poster_path']
         airdate = season_data['air_date']
         overview = season_data['overview']
 
-        season = Season.objects.create(show=show, name=name,
+        season = Season.objects.create(show=show, name=name, season_poster=season_poster
                 season_number=season_number, airdate=airdate, overview=overview)
 
         for episode in season_data['episodes']:
             name = episode['name']
             episode_number = episode['episode_number']
+            screenshot = episode['still_path']
             airdate = episode['air_date']
             overview = episode['overview']
 
             Episode.objects.create(season=season, airdate=airdate, name=name,
-                    overview=overview, episode_number=episode_number)
+                    screenshot=screenshot, overview=overview, episode_number=episode_number)
 
         return "Successfully imported Season {} of {} from TMDB".format(season_number, show.name)
     except Exception as error:
