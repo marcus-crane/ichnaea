@@ -25,8 +25,9 @@ def fetch_show(tmdb_id):
         overview = show['overview']
         imported = timezone.now()
 
-        Show.objects.create(tmdb_id=tmdb_id, name=name, slug=slug, episodes=episodes,
-                seasons=seasons, language=language, overview=overview, imported=imported)
+        Show.objects.create(tmdb_id=tmdb_id, bg_art=bg_art, name=name,
+                slug=slug, episodes=episodes, seasons=seasons, 
+                language=language, overview=overview, imported=imported)
 
         return "Successfully imported {} from TMDB".format(name)
     except Exception as error:

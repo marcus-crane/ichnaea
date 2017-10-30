@@ -1,0 +1,28 @@
+{% extends 'shows/base.html' %}
+
+{% block content %}
+  <div class="ui link cards">
+  {% for show in shows %}
+    <div class="ui card">
+      <div class="image">
+        <img src="https://image.tmdb.org/t/p/w320{{ show.bg_art }}">
+      </div>
+      <div class="content">
+        <a class="header">{{ show.name }}</a>
+        <div class="meta">
+          <span class="date">
+            {% if show.seen %}
+              Watched
+            {% else %}
+              Not Watched
+            {% endif %}
+          </span>
+        </div>
+      </div>
+      <div class="extra content">
+        {{ show.seasons }} season{{ show.seasons|pluralize}}
+      </div>
+    </div>
+  {% endfor %}
+    </div>
+{% endblock %}
