@@ -8,4 +8,30 @@ class Show(models.Model):
   episodes = models.IntegerField('Number of episodes', blank=True)
   seasons = models.IntegerField('Number of seasons', blank=True)
   overview = models.TextField('General overview', blank=True)
+  seen = models.BooleanField('Seen this show?', default=False)
   imported = models.DateField('First imported', blank=True, null=True)
+
+  def __str__(self):
+    return self.name
+
+class Season(models.Model):
+  show = models.ForeignKey(Show, on_delete=models.CASCADE)
+  name = models.CharField('Season title', max_length=40)
+  season_number = models.IntegerField('Season number')
+  airdate = models.DateField('Season kickoff', blank=True)
+  overview = models.TextField('Season overview', blank=True)
+  seen = models.BooleanField('Seen this season?', default=False)
+
+  def __str__(self):
+    return self.name
+
+class Episode(models.Model):
+  season = models.ForeignKey(Season, on_delete=models.CASCADE)
+  airdate = models.DateField('Episode airdate', blank=True)
+  name = models.CharField('Episode name', max_length=200)
+  overview = models.TextField('Episode overview', blank=True)
+  episode_number = models.IntegerField('Episode number')
+  seen = models.BooleanField('Seen this episode?', default=False)
+
+  def __str__(self):
+    return self.name
