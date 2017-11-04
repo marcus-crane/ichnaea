@@ -9,7 +9,14 @@ import requests
 
 @shared_task
 def fetch_show(tmdb_id):
-    """ Imports show details from TheMovieDB """
+    """ 
+    Imports show details from TheMovieDB
+
+    This function takes a series ID from TMDB and pulls
+    various informational points about the series and
+    submits them to the database
+
+    """
     try:
         headers = { 'User-Agent': 'Ichnaea v0.1 <marcus@thingsima.de>' }
         url = 'https://api.themoviedb.org/3/tv/{}?api_key={}'.format(tmdb_id, settings.TMDB_KEY)
@@ -35,7 +42,14 @@ def fetch_show(tmdb_id):
 
 @shared_task
 def fetch_season(tmdb_id, season_number):
-    """ Import season details from TheMovieDB """
+    """
+    Import season details from TheMovieDB
+
+    This functions takes a TMDB ID and a season number
+    and returns data about both the seasons and every
+    respective seasonal episode too.
+
+    """
     show = Show.objects.get(tmdb_id=tmdb_id)
     try:
         headers = { 'User-Agent': 'Ichnaea v0.1 <marcus@thingsima.de>' }
