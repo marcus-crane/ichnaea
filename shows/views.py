@@ -13,6 +13,6 @@ class IndexView(generic.ListView):
 def seasons(request, slug):
   show = get_object_or_404(Show, slug=slug)
   seasons = Season.objects.filter(show=show)
-  episodes = Episode.objects.filter(season=seasons[0])
+  episodes = Episode.objects.filter(season__show=show)
   context = {'seasons': seasons, 'episodes': episodes}
   return render(request, 'shows/seasons.html', context)

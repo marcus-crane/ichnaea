@@ -17,12 +17,14 @@
           </thead>
           <tbody>
             {% for episode in episodes %}
-              <tr>
-                  <td>{{ episode.episode_number }}
-                  <td>{{ episode.name }}</td>
-                  <td>{{ episode.airdate }}</td>
-                  <td>{{ episode.seen }}</td>
-              </tr>
+              {% if episode.season.name == season.name %}
+                <tr>
+                    <td>{{ episode.episode_number }}</td>
+                    <td>{{ episode.name }}</td>
+                    <td>{{ episode.airdate }}</td>
+                    <td>{{ episode.seen }}</td>
+                </tr>
+              {% endif %}
             {% endfor %}
           </tbody>
         </table>
