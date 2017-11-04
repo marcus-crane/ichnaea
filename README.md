@@ -6,7 +6,7 @@ I needed a name and a quick google shows that Ichnaea was the Greek Goddess of t
 
 As much as I like [trakt](https://trakt.tv), I felt that it's a bit overkill when all I want is a simple TV show tracker.
 
-Most of them also use [tvdb](https://www.thetvdb.com] which doesn't support sports, and by association, wrestling which is a pain in the butt.
+Most of them also use [tvdb](https://www.thetvdb.com) which doesn't support sports, and by association, wrestling which is a pain in the butt.
 
 Anyway, this is also just an excuse to build a slightly larger project that I can actually get some use out of personally.
 
