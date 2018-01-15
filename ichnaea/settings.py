@@ -110,8 +110,3 @@ STATIC_URL = '/static/'
 
 # TVDB keys
 APIKEY = config['keys']['apikey']
-USERNAME = config['keys']['username']
-USERKEY = config['keys']['userkey']
-
-# Celery
-CELERY_BROKER_URL = 'amqp://localhost'

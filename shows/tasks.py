@@ -12,29 +12,35 @@ def create_show(show):
     tvdb_id = show.id
     name = show.seriesName
     slug = slugify(show.seriesName)
-    poster = 'https://www.thetvdb.com/banners/_cache/' + posters[0]['fileName']
+    poster = 'https://www.thetvdb.com/banners/' + posters[0]['fileName']
     debut = show.firstAired
     overview = show.overview
     seen = False
     status = show.status
     network = show.network
 
-    return Show.objects.create(
-        tvdb_id=tvdb_id, name=name, slug=slug, poster=poster, debut=debut,
-        overview=overview, seen=seen, status=status, network=network)
+    try:
+        return Show.objects.create(
+            tvdb_id=tvdb_id, name=name, slug=slug, poster=poster, debut=debut,
+            overview=overview, seen=seen, status=status, network=network)
+    except:
+        print('Sorry, that show already exists')
 
 def create_episodes(episodes, show):
     for episode in episodes:
-        number = episode['airedEpisodeNumber']
-        season = episode['airedSeason']
-        name = episode['episodeName']
-        tvdb_id = episode['id']
-        aired = episode['firstAired']
-        overview = episode['overview']
+        try:
+            number = episode['airedEpisodeNumber']
+            season = episode['airedSeason']
+            name = episode['episodeName']
+            tvdb_id = episode['id']
+            aired = episode['firstAired']
+            overview = episode['overview']
 
-        Episode.objects.create(
-            show=show, number=number, season=season, name=name,
-            tvdb_id=tvdb_id, aired=aired, overview=overview)
+            Episode.objects.create(
+                show=show, number=number, season=season, name=name,
+                tvdb_id=tvdb_id, aired=aired, overview=overview)
+        except:
+            continue
 
 
 def fetch_show(name):
