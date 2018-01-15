@@ -1,81 +1,59 @@
 from django.conf import settings
-from django.utils import timezone
 from django.utils.text import slugify
-from celery import shared_task
 
-from .models import Show, Season, Episode
+from .models import Show, Episode
 
-import requests
+import tvdbsimple as tvdb
+tvdb.KEYS.API_KEY = settings.APIKEY
 
-@shared_task
-def fetch_show(tmdb_id):
+def create_show(show):
+    posters = show.Images.poster()
+    
+    tvdb_id = show.id
+    name = show.seriesName
+    slug = slugify(show.seriesName)
+    poster = 'https://www.thetvdb.com/banners/_cache/' + posters[0]['fileName']
+    debut = show.firstAired
+    overview = show.overview
+    seen = False
+    status = show.status
+    network = show.network
+
+    return Show.objects.create(
+        tvdb_id=tvdb_id, name=name, slug=slug, poster=poster, debut=debut,
+        overview=overview, seen=seen, status=status, network=network)
+
+def create_episodes(episodes, show):
+    for episode in episodes:
+        number = episode['airedEpisodeNumber']
+        season = episode['airedSeason']
+        name = episode['episodeName']
+        tvdb_id = episode['id']
+        aired = episode['firstAired']
+        overview = episode['overview']
+
+        Episode.objects.create(
+            show=show, number=number, season=season, name=name,
+            tvdb_id=tvdb_id, aired=aired, overview=overview)
+
+
+def fetch_show(name):
     """ 
-    Imports show details from TheMovieDB
+    Imports show details from TheTVDB
 
-    This function takes a series ID from TMDB and pulls
-    various informational points about the series and
-    submits them to the database
+    This function takes a series ID from TVDB and pulls
+    various details about the series and submits them to the database
 
+    It just assumes the first result is what you want for now
     """
-    try:
-        headers = { 'User-Agent': 'Ichnaea v0.1 <marcus@thingsima.de>' }
-        url = 'https://api.themoviedb.org/3/tv/{}?api_key={}'.format(tmdb_id, settings.TMDB_KEY)
-        r = requests.get(url, headers=headers)
-        show = r.json()
+    
+    search = tvdb.Search()
+    response = search.series(name)
+    show_id = search.series[0]['id']
+    show = tvdb.Series(show_id)
+    response = show.info()
+    
+    show_entry = create_show(show)
 
-        name = show['name']
-        slug = slugify(name)
-        bg_art = show['backdrop_path']
-        episodes = show['number_of_episodes']
-        seasons = show['number_of_seasons']
-        language = show['original_language']
-        overview = show['overview']
-        imported = timezone.now()
-
-        Show.objects.create(tmdb_id=tmdb_id, bg_art=bg_art, name=name,
-                slug=slug, episodes=episodes, seasons=seasons, 
-                language=language, overview=overview, imported=imported)
-
-        return "Successfully imported {} from TMDB".format(name)
-    except Exception as error:
-        return error
-
-@shared_task
-def fetch_season(tmdb_id, season_number):
-    """
-    Import season details from TheMovieDB
-
-    This functions takes a TMDB ID and a season number
-    and returns data about both the seasons and every
-    respective seasonal episode too.
-
-    """
-    show = Show.objects.get(tmdb_id=tmdb_id)
-    try:
-        headers = { 'User-Agent': 'Ichnaea v0.1 <marcus@thingsima.de>' }
-        url = 'https://api.themoviedb.org/3/tv/{}/season/{}?api_key={}'.format(tmdb_id, season_number, settings.TMDB_KEY)
-        r = requests.get(url, headers=headers)
-        season_data = r.json()
-
-        name = season_data['name']
-        season_number = season_data['season_number']
-        season_poster = season_data['poster_path']
-        airdate = season_data['air_date']
-        overview = season_data['overview']
-
-        season = Season.objects.create(show=show, name=name, season_poster=season_poster,
-                season_number=season_number, airdate=airdate, overview=overview)
-
-        for episode in season_data['episodes']:
-            name = episode['name']
-            episode_number = episode['episode_number']
-            screenshot = episode['still_path']
-            airdate = episode['air_date']
-            overview = episode['overview']
-
-            Episode.objects.create(season=season, airdate=airdate, name=name,
-                    screenshot=screenshot, overview=overview, episode_number=episode_number)
-
-        return "Successfully imported Season {} of {} from TMDB".format(season_number, show.name)
-    except Exception as error:
-        return error
+    episodes = show.Episodes.all()
+    create_episodes(episodes, show_entry)

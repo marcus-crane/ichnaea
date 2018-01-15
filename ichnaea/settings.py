@@ -7,12 +7,11 @@ import configparser
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJ_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Import secret keys
-config = configparser.SafeConfigParser(allow_no_value=True)
-config.read('{}/config.ini'.format(PROJ_DIR))
+config = configparser.ConfigParser()
+config.read(BASE_DIR + '/keys.ini')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -109,8 +108,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# TMDB API Key
-TMDB_KEY = config.get('tmdb', 'key')
+# TVDB keys
+APIKEY = config['keys']['apikey']
+USERNAME = config['keys']['username']
+USERKEY = config['keys']['userkey']
 
 # Celery
 CELERY_BROKER_URL = 'amqp://localhost'

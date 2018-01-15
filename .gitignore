@@ -7,3 +7,4 @@ __pycache__
 *.sqlite3
 config.ini
 .DS_Store
+keys.ini
