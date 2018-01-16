@@ -14,5 +14,6 @@ class EpisodeView(generic.ListView):
     context_object_name = 'episodes'
 
     def get_queryset(self):
-    	seasons = {}
-        return Episode.objects.filter(show__name='Bubblegum Crisis Tokyo 2040').order_by('season')
+        return Episode.objects.filter(
+            show__slug=self.kwargs['slug']
+        ).order_by('season')

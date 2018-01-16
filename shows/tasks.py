@@ -3,21 +3,19 @@ from django.utils.text import slugify
 
 from .models import Show, Episode
 
-import tvdbsimple as tvdb
-tvdb.KEYS.API_KEY = settings.APIKEY
+import tvdb_api
+t = tvdb_api.Tvdb()
 
 def create_show(show):
-    posters = show.Images.poster()
-    
-    tvdb_id = show.id
-    name = show.seriesName
-    slug = slugify(show.seriesName)
-    poster = 'https://www.thetvdb.com/banners/' + posters[0]['fileName']
-    debut = show.firstAired
-    overview = show.overview
+    tvdb_id = show['id']
+    name = show['seriesName']
+    slug = slugify(name)
+    poster = show['banner']
+    debut = show['firstAired']
+    overview = show['overview']
     seen = False
-    status = show.status
-    network = show.network
+    status = show['status']
+    network = show['network']
 
     try:
         return Show.objects.create(
@@ -26,22 +24,17 @@ def create_show(show):
     except:
         print('Sorry, that show already exists')
 
-def create_episodes(episodes, show):
-    for episode in episodes:
-        try:
-            number = episode['airedEpisodeNumber']
-            season = episode['airedSeason']
-            name = episode['episodeName']
-            tvdb_id = episode['id']
-            aired = episode['firstAired']
-            overview = episode['overview']
+def create_episode(episode, show):
+    number = episode['airedEpisodeNumber']
+    season = episode['airedSeason']
+    name = episode['episodeName']
+    tvdb_id = episode['id']
+    aired = episode['firstAired']
+    overview = episode['overview']
 
-            Episode.objects.create(
-                show=show, number=number, season=season, name=name,
-                tvdb_id=tvdb_id, aired=aired, overview=overview)
-        except:
-            continue
-
+    Episode.objects.create(
+        show=show, number=number, season=season, name=name,
+        tvdb_id=tvdb_id, aired=aired, overview=overview)
 
 def fetch_show(name):
     """ 
@@ -53,13 +46,9 @@ def fetch_show(name):
     It just assumes the first result is what you want for now
     """
     
-    search = tvdb.Search()
-    response = search.series(name)
-    show_id = search.series[0]['id']
-    show = tvdb.Series(show_id)
-    response = show.info()
-    
-    show_entry = create_show(show)
-
-    episodes = show.Episodes.all()
-    create_episodes(episodes, show_entry)
+    show = t[name]
+    show_entry = create_show(show.data)
+    for season in show.keys():
+        for episode in show[season].keys():
+            ep = show[season][episode]
+            create_episode(ep, show_entry)
