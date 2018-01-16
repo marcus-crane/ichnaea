@@ -1,14 +1,12 @@
 {% extends 'shows/base.html' %}
 
 {% block content %}
-  <fieldset class="bn">
-    <legend class="fw7 mb2">Episodes</legend>
+  <div class="pa3 pa4-ns">
+    <h4 class="f6 fw6">Season 1</h4>
     {% for episode in episodes %}
-    {{ episode.season }}
-    <div class="flex items-center mb2">
-      <input class="mr2" type="checkbox" id="{{ episode.name }}">
-      <label for="{{ episode.name }}" class="lh-copy">{{ episode.number }} {{ episode.name }}</label>
-    </div>
+    <dl class="f6 lh-title mv2">
+      <dt class="dib b">{{ episode.number|stringformat:"02d" }}</dt>
+      <dd class="dib ml0 gray">{{ episode.name }}</dd>
+    </dl>
     {% endfor %}
-  </fieldset>
 {% endblock %}
