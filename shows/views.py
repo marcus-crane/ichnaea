@@ -1,6 +1,7 @@
 from django.views import generic
 
 from .models import Show, Episode
+from .tasks import sort_show_into_seasons
 
 class IndexView(generic.ListView):
     template_name = 'shows/index.html'
@@ -11,9 +12,7 @@ class IndexView(generic.ListView):
 
 class EpisodeView(generic.ListView):
     template_name = 'shows/episodes.html'
-    context_object_name = 'episodes'
+    context_object_name = 'seasons'
 
     def get_queryset(self):
-        return Episode.objects.filter(
-            show__slug=self.kwargs['slug']
-        ).order_by('season')
+        return sort_show_into_seasons(self.kwargs['slug'])

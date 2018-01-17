@@ -2,11 +2,13 @@
 
 {% block content %}
   <div class="pa3 pa4-ns">
-    <h4 class="f6 fw6">Season 1</h4>
-    {% for episode in episodes %}
-    <dl class="f6 lh-title mv2">
-      <dt class="dib b">{{ episode.number|stringformat:"02d" }}</dt>
-      <dd class="dib ml0 gray">{{ episode.name }}</dd>
-    </dl>
-    {% endfor %}
+  	{% for season_number, season in seasons.items %}
+    <h4 class="f6 fw6">Season {{ season_number }}</h4>
+	    {% for episode in season %}
+	    <dl class="f6 lh-title mv2">
+	      <dt class="dib b">{{ episode.number|stringformat:"02d" }}</dt>
+	      <dd class="dib ml0 gray">{{ episode.name }}</dd>
+	    </dl>
+	    {% endfor %}
+	{% endfor %}
 {% endblock %}

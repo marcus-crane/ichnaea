@@ -1,7 +1,5 @@
 from django.conf import settings
 from django.utils.text import slugify
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
 
 from .models import Show, Episode
 
@@ -64,4 +62,4 @@ def sort_show_into_seasons(slug):
         show[season] = []
     for episode in episodes:
         show[episode.season].append(episode)
-    pp.pprint(show)
+    return show
