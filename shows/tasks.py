@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.utils.text import slugify
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 
 from .models import Show, Episode
 
@@ -52,3 +54,14 @@ def fetch_show(name):
         for episode in show[season].keys():
             ep = show[season][episode]
             create_episode(ep, show_entry)
+
+def sort_show_into_seasons(slug):
+    episodes = Episode.objects.filter(show__slug=slug)
+    seasons = set()
+    [seasons.add(episode.season) for episode in episodes]
+    show = {}
+    for season in seasons:
+        show[season] = []
+    for episode in episodes:
+        show[episode.season].append(episode)
+    pp.pprint(show)
